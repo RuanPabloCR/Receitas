@@ -1,3 +1,5 @@
+using RecipeBook.APi.Filters;
+using RecipeBook.APi.Middleware;
 
 namespace RecipeBook.APi
 {
@@ -11,8 +13,9 @@ namespace RecipeBook.APi
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddEndpointsApiExplorer(); 
             builder.Services.AddSwaggerGen();
+            builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)));
 
             var app = builder.Build();
 
@@ -22,11 +25,12 @@ namespace RecipeBook.APi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<CultureMiddleware>();
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            
 
             app.MapControllers();
 
